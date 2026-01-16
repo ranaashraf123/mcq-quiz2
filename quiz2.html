@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MCQ Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    .question {
+      background: white;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+    }
+    h3 {
+      margin-top: 0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<h1>MCQ Test</h1>
+<div id="quiz"></div>
+<button onclick="submitQuiz()">Submit</button>
+
+<script>
+const rawQuestions = `
+
+S: teeth are coming through
+-: at 4-5 months of the child's life
+-: at 5-6 months of the child's life
++: at 6-8 months of the child's life
+-: at 9-10 months of the child's life
+-: at 11-12 months of the child's life
+
+S: tooth root formation is complete
++: for children aged 1.5 years
+-: for children aged 2-2.5 years
+-: at the age of the child 3 years
+-: at the age of the child 4 years
+-: at the age of the child 5 years
+
+S: the dental plate is laid down during the period of intrauterine development of the fetus
++: at 6-7 weeks
+-: at 8-9 weeks
+-: at 10-16 weeks
+-: at 17-20 weeks
+-: at 21-30 weeks
+
+S: mineralization of milk teeth begins during the period of intrauterine development of the fetus
+-: at 7-9 weeks
+-: at 10-15 weeks
++: at 16-18 weeks
+-: at 19-30 weeks
+-: at 31-40 weeks
+
+S: tissues are formed from epithelium
++: enamel
+-: dentin
+-: pulp
+-: cement
+-: periodontium
+
+S: the physiological type of root resorption of primary teeth is
+-: I - uniform resorption of all roots
+-: II - resorption with the predominance of the process in the area of one root
+-: III - resolution with a predominance of the process in the area of root bifurcation
+-: root resorption as a result of chronic inflammation of periodontal tissues
++: I, II, III types of root resorption
+
+S: teeth are coming through
+-: for children aged 5-6 years
++: for children aged 6-7 years
+-: for children aged 6-8 years
+-: at the age of the child 8 years
+-: at the age of the child 9 years
+
+S: tooth root formation is complete
+-: aged 8-9 years
++: aged 9-10 years
+-: aged 10-12 years
+-: aged 10-13 years
+-: aged 11-12 years
+
+S: when removing a temporary tooth in the stage of significant root resorption, it provides sufficient anesthesia
+-: conduction anesthesia
++: application pain relief
+-: inhalation anesthesia
+-: infiltration anesthesia
+-: intraosseous anesthesia
+
+S: adrenaline solution in pain-relieving solution for children under 3 years old
++: do not add
+-: add 2 drops of adrenaline solution to 5 ml of pain-relieving solution
+-: add 2 drops of adrenaline solution to 10 ml of pain-relieving solution
+-: add 1 drop of adrenaline solution to 5 ml of anesthetic solution
+-: add 1 drop of adrenaline solution to 10 ml of anesthetic
+
+S: children have temporary teeth
++: large pulp chamber, wide canals
+-: large pulp chamber, narrow canals
+-: small pulp chamber, wide canals and large apical foramen
+-: the pulp chamber is not formed
+-: small pulp chamber, narrow canals and narrow apical foramen
+
+S: mineralization of teeth 51,61, 71, 81 in the prenatal period begins at:
+-: 2-3 months;
++: 4-5 months;
+-: 6-7 months;
+-: 7-8 months;
+-: 8-9 months.
+
+S: mineralization of teeth 52, 62, 72, 82 in the prenatal period begins at:
+-: 3-4 months;
++: 4-5 months;
+-: 5-6 months;
+-: 6-7 months;
+-: 8-9 months
+
+S: formation of the roots of teeth 51, 61, 71, 81 ends in:
++: 1.5 years;
+-: 2-2.5 years;
+-: 3 years;
+-: 4 years;
+-: 5 years.
+
+S: formation of roots of teeth 52, 62,72, 82 ends in:
++: 2 years;
+-: 3 years;
+-: 4 years;
+-: 5 years;
+-: 6 years.
+
+S: formation of roots of teeth 54, 64,74,84 ends in:
+-: 2-3 years,
++: 3-4 years,
+-: 4-5 years;
+-: 5-6 years;
+-: 6-7 years.
+
+S: age at which the roots of teeth 54, 64, 74, 84 are maximally resorbed:
+-: 7 years;
+-: 8 years;
++: 9 years;
+-: 10 years;
+-: 11 years.
+
+S: age at which the roots of teeth 55, 65, 75, 85 are maximally resorbed:
+-: 6-7 years;
+-: 8-8.5 years;
+-: 9 - 9.5 years;
++: 9-10 years;
+-: 10-11 years.
+
+S: with chronic inflammation of the periodontium, resorption of the roots of temporary teeth is observed:
+-: uniform;
+-: with the predominance of the process in the region of one root;
+-: with a predominance of the process in the furcation area;
++: pathological;
+-: physiological.
+
+S: The beginning of the laying of follicles of permanent teeth occurs at:
+-: 1st month;
++: 5-6 month;
+-: 6-7 month;
+-: 7-8 month;
+-: 8-9 months.
+
+S: mineralization of teeth 16, 26, 36, 46 begins:
+-: in the 5th month of intrauterine life;
+-: at 3-4 months of the child’s life;
++: at the end of the antenatal period;
+-: for children aged 1-1.5 years;
+-: at the age of 2-2.5 years.
+
+S: 11,21,31,41 teeth erupt at the age of:
+-: 5-6 years;
+-: 5-7 years;
++: 6-8 years;
+-: 8 years;
+-: 9 years.
+
+S: 12, 22, 32, 42 teeth erupt at the age of:
+-: 5-6 years;
+-: 5-7 years;
+-: 6-8 years;
++: 7-8 years;
+-: 9 years.
+
+S: formation of roots of teeth 11,21,31,41 ends at the age of:
+-: 8-9 years;
++: 9-10 years;
+-: 10-12 years;
+-: 10-13 years;
+-: 11-12 years old.
+
+S: formation of the roots of teeth 12, 22, 32, 42 ends at the age of:
+-: 8-10 years;
+-: 9-10 years;
++: 10-11 years;
+-: 11-12 years;
+-: 12-13 years old.
+
+S: formation of the roots of teeth 16, 26, 36, 46 ends at the age of:
++: 9-10 years;
+-: 10-11 years;
+-: 12 years;
+-: 13 years;
+-: 14 years old.
+
+S: growth of jaw bones in children occurs:
+-: evenly throughout the years;
++: most active at 1-3 years, 6-8 years, 13-15 years;
+-: most active at 3-5 years, 10-12 years;
+-: most active up to 1 year;
+-: most active after 15 years.
+
+S: in newborns:
+-: rudiments of temporary teeth are absent;
+-: rudiments of permanent teeth are absent;
+-: rudiments of temporary and permanent teeth are absent;
+-: there are rudiments of temporary teeth;
++: there are rudiments of temporary and permanent teeth.
+
+S: In newborns, the rudiments of teeth on the upper jaw are located:
+-: in the gingival fold;
+-: in the alveolar process;
++: adjacent to the bottom of the orbit;
+-: the incisors have already erupted;
+-: none.
+
+
+S: the prevalence of dental caries is expressed
++: in percentages
+-: in absolute units
+-: in relative units
+
+S: the intensity of dental caries in a patient is expressed by:
++: the sum of carious, filled and removed teeth due to complications of caries in an individual
+-: the ratio of the sum of carious, filled and removed teeth due to complications of caries to the patient's age
+-: the average sum of carious, filled and removed teeth due to complications of caries in a group of individuals
+
+S: caries resistance is
++: resistance to cariogenic factors
+-: resistance to acids
+-: resistance to alkalis
+
+S: to determine the intensity of caries, you need to know the index
++: KPU
+-: CPITN
+-: RMA
+-: IG
+
+S: caries in the white spot stage in children is: 
+-: cutting edge
+-: molars tubercles
+-: crown equator
++: cervical region
+
+S: staining of enamel with methylene blue solution in children is observed with: dental fluorosis
+-: enamel hypoplasia
++: initial caries
+-: wedge-shaped defect
+
+S: during the period of eruption of permanent teeth, the surfaces most often affected by caries are: 
+-: vestibular
+-: proximal
++: occlusal
+-: oral
+
+S: Among the bacteria of dental plaque, the main cariogenic species are: 
+-: prevotella intermedia
+-: staphylococcus aureus
+-: atinomyces viscosus
++: streptococcus mutans
+
+S: dental plaque is a risk factor for the development in children of: 
+-: enamel hypoplasia
+-: wedge-shaped defect
++: caries
+-: fluorosis
+
+S: risk factors for dental caries in children are: 
+-: consumption of hard foods 
++: low fluoride content in water 
+-: trauma to the follicle of a permanent tooth 
+-: disease suffered in the first year of life
+
+S: Children's consumption of sweet carbonated drinks contributes to the development of: 
+-: periodontitis
++: caries
+-: fluorosis
+-: gingivitis
+
+S: low fluoride content in drinking water is a risk factor for the development of: 
+-: enamel hypoplasia
+-: fluorosis
+-: erosion
++: caries
+
+S: the purpose of necrotomy during preparation of a carious cavity is: 
+-: finishing of the cavity 
+-: restoration of the shape of the tooth 
++: elimination of recurrence of caries 
+-: creation of a contact point
+
+S: the purpose of forming a carious cavity is: 
+-: creation of a contact point
++: creation of conditions for fixing the filling
+-: restoration of tooth function
+-: restoration of the anatomical shape of the tooth
+
+S: the most preferred method of treating enamel caries is: 
+-: grinding of the affected enamel with discs - microabrasion 
++: restoration of its mineral composition 
+-: excision of the affected enamel with subsequent filling
+
+S: for successful treatment of enamel caries of permanent teeth it is necessary to carry out
++: normalization of oral hygiene
+-: restoration of teeth with composite materials
+-: implementation of the delayed filling method
+-: rinsing with antiseptic preparations
+
+S: the most common dental disease in children is: dental fluorosis
++: dental caries
+-: enamel hypoplasia
+-: aphthous stomatitis
+
+S: levels of caries intensity according to the WHO gradation are established for children aged__years
+-: 15
+-: 18
++: 12
+-: 6
+
+S: for the prevention of caries, children's toothpastes include:
++: aminofluorides
+-: chlorhexidine
+-: triclosan
+-: sorbitol
+
+S: for the prevention of caries, children's toothpastes include:
++: sodium fluoride
+-: potassium nitrate
+-: sodium pyrophosphate
+-: sodium lauryl sulfate
+
+S: to prevent caries, children's toothpastes include compounds: 
++: calcium 
+-: tin 
+-: iron 
+-: potassium
+
+S: The primary means for removing plaque from the proximal surfaces of teeth is
++: dental floss
+-: mouthwash
+-: toothpaste
+-: toothbrush
+
+S: It is recommended to teach children how to use dental floss from the age of 
++: 10-12
+-: 15-16
+-: 4-5
+-: 7-8
+
+S: Parents should start brushing their children's teeth:
+ -: from birth 
++: after the first baby tooth has erupted 
+-: after all baby teeth have erupted 
+-: after the first permanent tooth has erupted
+
+S: indication for the use of endogenous methods of fluoride prophylaxis of caries in children is:
+ -: high prevalence of fluorosis
++: high level of caries intensity
+-: low level of knowledge about caries prevention
+-: unsatisfactory level of oral hygiene
+
+S: dentin with active caries
+-: pigmented, difficult to remove with an excavator
+-: light, moist, difficult to remove with an excavator
+-: pigmented, easily removed with an excavator
++: light, moist, easily removed with an excavator 
+
+S: dentin with slow progression of caries
++: pigmented, difficult to remove with an excavator
+-: light, moist, easily removed with an excavator
+-: pigmented, easily removed with an excavator
+-: light, moist, difficult to remove with an excavator
+
+S: early childhood caries is considered to be caries that manifests itself before the age of ____ months
+-: 83
+-: 23
++: 72
+-: 12
+
+S: early childhood caries is characterized by: 
+-: slow progression
+-: low intensity
+-: moderate intensity
++: high intensity
+
+S: luminescent diagnostics is based on changes in
++: optical properties of enamel
+-: organic components of enamel during pathological processes
+-: dentin permeability
+-: enamel permeability
+
+S: the consequence of caries of hard dental tissues is
++: complete destruction of the crown of the tooth
+-: enamel hyperplasia
+-: erosion of hard dental tissues
+-: anomaly of development and eruption of teeth
+
+S: Dental instruments are used to determine the quality of preparation of the carious cavity
++: probe, mirror
+-: stopper, probe
+-: iron, probe
+-: tweezers, mirror
+
+S: in acute dental caries, dentin has the color: 
+-: brown
+-: pink
+-: black
++: light yellow
+
+S: minimal heating of the pulp is achieved by preparation
+-: continuous with cooling
+-: continuous without cooling
+-: intermittent without cooling
++: intermittent with cooling
+
+S: when filling with composite materials, the enamel bevel is formed with the purpose of: 
++: increasing the adhesion area 
+-: improving the polishing of the composite 
+-: chemical bond of the composite material with the enamel 
+-: uniform distribution of the load on the tooth tissue
+
+S: tunnel method of preparation of carious cavity according to class 2 allows: to preserve pulp biology
++: to preserve existing natural contact point
+-: to form contact point
+-: to preserve chewing surface
+
+S: mineralized dental deposits include: 
+-: pellicle
+-: food residues
+-: soft dental plaque
++: tartar
+
+S: for filling using the sandwich technique, a combination of materials is used: 
+-: aqueous dentin + CIC 
++: CIC + composite
+-: flowable composite + microhybrid composite
+-: phosphate cement + amalgam
+
+S: to create the basis of the restoration, use_ shade of material
+-: enamel
+-: transparent
+-: any
++: opaque
+
+S: the greatest permeability of enamel is observed on the teeth: on the vestibular and lingual surfaces: 
+-: on the contact surfaces 
++: in the cervical region, pits, fissures
+-: in the area of the tubercles, cutting edge
+
+S: the dentin etching (conditioning) stage is carried out for _ layer
+-: formation of the smear layer
++: removal of the smear layer
+-: removal of the hybrid
+-: formation of oxygen-inhibited
+
+S: replacement dentin is deposited
+-: along the enamel-dentin junction
++: in the tooth cavity, reducing its volume
+-: in the layer of peripulpar dentin
+-: at the apical opening
+
+S: the carious process develops with: balance of re- and demineralization
+-: absence of remineralization
+-: demineralization
++: predominance of demineralization
+
+S: replacement dentin
+-: stops caries
++: prevents the progression of the carious process
+-: is a stable structure and is not subject to destruction
+-: is formed during the rapid development of caries
+
+S: focal demineralization of enamel occurs on teeth
+-: more often temporary
+-: permanent
+-: temporary
++: temporary and permanent
+
+S: acid etching method ensures contact of enamel with composites due to: 
+-: macroadhesion
+-: chemical bonding
++: microadhesion
+-: adsorption
+
+S: when filling carious cavities using the “closed sandwich” method, the liner
+-: is not covered with composite
++: is covered with composite
+-: is placed on the edges of the cavity
+-: is applied to the walls of the cavity
+
+S: Workers involved in the preparation and application of amalgam should be provided with
+ -: surgical gowns with pockets - disposable medical caps 
++: surgical gowns without pockets 
+-: medical gowns without collars
+
+S: when conducting electroodontometry of the causal tooth, it is advisable to start the measurement with the tooth
++: the same one on the opposite side of the dental arch
+-: any other
+-: antagonist
+-: causal
+
+S: in caries at the chalk spot stage, the following ions are predominantly lost from the damaged subsurface layer of enamel
+-: fluorine
+-: sodium
++: calcium
+-: chlorine
+
+S: when conducting a temperature test, the irritant is placed: 
+-: on the equator 
++: directly into the carious cavity 
+-: on the remaining enamel in the cervical region of the tooth crown 
+-: on the area of the tubercles
+
+S: the reaction of a tooth to temperature stimuli is called
++: thermodiagnostics
+-: rheodontography
+-: electroodontodiagnostics
+-: rheoparodontography
+
+S: The Diagnodent device is used in dentistry for diagnostics
+-: pulpitis
++: caries
+-: periostitis
+-: periodontitis
+
+S: methods for diagnosing enamel caries at the spot stage are based on: 
+-: a decrease in enamel permeability 
+-: an increase in enamel permeability
+ +: a change in the optical properties of enamel 
+-: enamel stability
+
+S: to create a super-adaptive layer use: compomer
+-: packable composite
+-: composite of normal consistency
++: flowable composite
+
+S: the effectiveness of rehabilitation treatment is assessed by: 
+-: the adequacy of treatment perception
++: the anatomical shape
+-: the general condition of the patient
+-: the perception of others
+
+S: age-related changes in dentin are characterized by: 
+-: a decrease in the level of dentin mineralization
++: significant deposition of secondary dentin
+-: a decrease in the number of cellular elements of the pulp
+-: an increase in the lumen of the dentinal tubules
+
+S: in the treatment of medium caries of temporary molars it is possible to use without a liner
+-: silidont
+-: silicine
++: glass ionomer cement
+-: composite materials
+
+
+S: from the listed below pathologies of hard dental tissues during their development occurs
+-: dental erosion
++: enamel hypoplasia, hyperplasia, fluorosis
+-: acid necrosis
+-: wedge-shaped defect
+-: hereditary disorders of dental development
+
+S: Of the following non-carious lesions of teeth that occur after their eruption, the most common is
++: trauma, dental erosion, wedge-shaped defect
+-: dental fluorosis
+-: enamel hypoplasia
+-: hyperplasia
+-: hereditary dental disorder
+
+S: The factor contributing to the development of hypoplasia is
+-: osteogenesis imperfecta
++: metabolic disorders in early childhood diseases
+-: fluoride content in drinking water
+-: infection of the follicle due to trauma
+-: unclear reason
+
+S: characteristic complaints with hypoplasia are
+-: hypersensitivity
+-: enamel wear
+-: all of the above
++: change in color and shape of teeth
+-: no complaints
+
+S: the most typical localization of dental defects in hypoplasia is
+-: vestibular surface of all groups of teeth
+-: fissures
+-: neck of the front teeth
++: vestibular surface of incisors, canines and tubercles of the first molars
+-: various areas of enamel
+
+S: forms of clinical manifestation of hypoplasia
+-: spotted
+-: dashed, cup-shaped
+-: erosive
+-: grooved
++: all of the above
+
+S: diseases similar in clinical picture to enamel hypoplasia are
+-: dental fluorosis
++: hereditary disorders of dental development
+-: caries
+-: necrosis of hard dental tissues
+-: hyperplasia
+
+S: The cause leading to dental fluorosis is
+-: unclear reason
++: fluoride content in drinking water over 1 mg/l
+-: metabolic disorders in diseases of early and childhood
+-: osteogenesis imperfecta
+-: excessive intake of fluoride-containing products
+
+S: typical forms of clinical manifestations in fluorosis
+-: spotted
+-: grooved
++: chalky-speckled
+-: destructive
+-: dashed
+
+S: The most typical localization of dental lesions in fluorosis is
++: vestibular surface of incisors, canines
+-: fissures, natural depressions
+-: tooth neck
+-: vestibular surface of the enamel of incisors, canines, premolars and molars
+-: damage to hard tissues of all groups of teeth
+
+S: typical complaints of a patient with fluorosis
++: change in tooth color
+-: hypersensitivity
+-: presence of defects in tooth enamel
+-: tooth wear
+-: tooth mobility
+
+S: the spotted form of dental fluorosis differs from the similar form of hypoplasia
+-: damage to teeth, mainly permanent teeth
+-: occurrence before teething
+-: atypical localization for caries
+-: multiple spots on the teeth
++: occurrence in areas with high fluoride content in drinking water
+
+S: The suspected cause of the wedge defect is
+-: mechanical action
+-: thyroid dysfunction
+-: eating large amounts of citrus fruits and their juices
+-: exposure of the tooth root due to periodontal disease
++: disruption of dental tissue trophism as a result of the degenerative process in the marginal periodontium
+
+S: the clinical symptom of a wedge-shaped defect is
++: a wedge-shaped defect on the tooth neck
+-: change in tooth shape
+-: defect of the cutting edge and tubercles in the form of a platform
+-: defect on the vestibular surface of the teeth in the form of an oval
+-: grooved defect in the pre-wood area
+
+S: typical complaints presented by patients with pathological tooth wear
+-: hyperesthesia
+-: pain in the temporomandibular joints
+-: aesthetic defect
++: all of the above
+-: spontaneous night pains
+
+`;
+
+function shuffle(array) {
+  return array.sort(() => Math.random() - 0.5);
+}
+
+function parseQuestion(block) {
+  const lines = block.trim().split("\n");
+  const questionText = lines[0].replace("S:", "").trim();
+
+  const options = [];
+  const correct = [];
+
+  lines.slice(1).forEach(line => {
+    if (line.startsWith("+:")) {
+      correct.push(options.length);
+      options.push(line.replace("+:", "").trim());
+    } else if (line.startsWith("-:")) {
+      options.push(line.replace("-:", "").trim());
+    }
+  });
+
+  const mapped = options.map((opt, i) => ({ text: opt, index: i }));
+  const shuffled = shuffle(mapped);
+
+  return {
+    question: questionText,
+    options: shuffled.map(o => o.text),
+    correct: shuffled
+      .map((o, i) => correct.includes(o.index) ? i : null)
+      .filter(i => i !== null)
+  };
+}
+
+const blocks = rawQuestions.trim().split(/\n\s*\n/);
+let questions = blocks.map(parseQuestion);
+
+
+const quizDiv = document.getElementById("quiz");
+
+questions.forEach((q, qi) => {
+  const div = document.createElement("div");
+  div.className = "question";
+
+  div.innerHTML = `
+    <h3>${qi + 1}. ${q.question}</h3>
+    <div class="options"></div>
+    <div class="feedback" id="feedback-${qi}"></div>
+  `;
+
+  const optionsDiv = div.querySelector(".options");
+
+  q.options.forEach((opt, oi) => {
+    optionsDiv.innerHTML += `
+      <label>
+        <input type="checkbox" name="q${qi}" value="${oi}">
+        ${opt}
+      </label><br>
+    `;
+  });
+
+  quizDiv.appendChild(div);
+});
+
+
+function submitQuiz() {
+  let score = 0;
+
+  questions.forEach((q, qi) => {
+    const checked = [...document.querySelectorAll(
+      `input[name="q${qi}"]:checked`
+    )].map(el => Number(el.value));
+
+    const isCorrect =
+      checked.length === q.correct.length &&
+      checked.every(v => q.correct.includes(v));
+
+    const feedbackDiv = document.getElementById(`feedback-${qi}`);
+
+    if (isCorrect) {
+      score++;
+      feedbackDiv.innerHTML = `<span style="color:green">✔ Correct</span>`;
+    } else {
+      const correctAnswers = q.correct
+        .map(i => q.options[i])
+        .join(", ");
+
+      feedbackDiv.innerHTML = `
+        <span style="color:red">✖ Wrong</span><br>
+        <strong>Correct answer:</strong> ${correctAnswers}
+      `;
+    }
+  });
+
+  alert(`Your score: ${score} / ${questions.length}`);
+}
+
+</script>
+
+</body>
+</html>
